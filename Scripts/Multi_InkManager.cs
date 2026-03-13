@@ -111,9 +111,20 @@ public class Multi_InkManager : MonoBehaviour
 
     public void SetPlayerVariable()
     {
+        /*
+        if (InkVariablesSaver.HasSavedState)
+            story.state.LoadJson(InkVariablesSaver.SavedState);
+        */
         string fullName = PlayerInfo.lastName + PlayerInfo.firstName;
         story.variablesState["playerName"] = fullName;
         story.variablesState["Name"] = PlayerInfo.firstName;
+        //INK에서 인식하는 변수를 Unity에서 인식하는 변수와 동기화시켜줘야 한다.
+        story.variablesState["money"] = PlayerInfo.money;
+        story.variablesState["strength"] = PlayerInfo.strength;
+        story.variablesState["sociability"] = PlayerInfo.sociability;
+        story.variablesState["intelligence"] = PlayerInfo.intelligence;
+        story.variablesState["refinement"] = PlayerInfo.refinement;
+        story.variablesState["appearance"] = PlayerInfo.appearance;
     }
 
     public void RefreshView()
@@ -150,10 +161,6 @@ public class Multi_InkManager : MonoBehaviour
             typingCoroutine = StartCoroutine(TypeText(currentText));
         }
 
-        // =============================
-        // ������ ó��
-        // =============================
-
         if (story.currentChoices.Count > 0)
         {
             nextButton.gameObject.SetActive(false);
@@ -184,14 +191,9 @@ public class Multi_InkManager : MonoBehaviour
         {
             nextButton.gameObject.SetActive(true);
         }
-
-        // =============================
-        // �±� ó��
-        // =============================
-
+        
         foreach (string tag in story.currentTags)
         {
-            // -------- show --------
             if (tag.StartsWith("show:"))
             {
                 string charNum = tag.Substring("show:".Length);
@@ -220,7 +222,6 @@ public class Multi_InkManager : MonoBehaviour
                 }
             }
 
-            // -------- gone --------
             if (tag.StartsWith("gone:"))
             {
                 string charNum = tag.Substring("gone:".Length);
@@ -231,7 +232,6 @@ public class Multi_InkManager : MonoBehaviour
                     characterRoot2.SetActive(false);
             }
 
-            // -------- expression --------
             if (tag.StartsWith("expression:"))
             {
                 string data = tag.Substring("expression:".Length).Trim();
@@ -250,7 +250,6 @@ public class Multi_InkManager : MonoBehaviour
                 }
             }
 
-            // -------- background --------
             if (tag.StartsWith("background:"))
             {
                 string bgNumber = tag.Substring("background:".Length);
@@ -287,9 +286,6 @@ public class Multi_InkManager : MonoBehaviour
         }
     }
 
-    // =====================================================
-    // Ÿ���� ȿ��
-    // =====================================================
 
     IEnumerator TypeText(string text)
     {
@@ -309,17 +305,12 @@ public class Multi_InkManager : MonoBehaviour
         isTyping = false;
     }
 
-    // =====================================================
-    // ��ư
-    // =====================================================
-
     public void OnClickNextButton()
     {
         string currentScene = SceneManager.GetActiveScene().name;
 
         if (!story.canContinue)
         {
-            //�̵��� �� ����
 
             if (currentScene == "(4)pub" || currentScene == "(4)stream" || currentScene == "(4)street1" || currentScene == "(4)street2")
                 SceneManager.LoadScene("(4)map");
