@@ -116,7 +116,7 @@ public class InkManager : MonoBehaviour
         }
         else
         {
-            dialogueText.text = "스토리 파일이 할당되지 않았습니다!";
+            dialogueText.text = "";
         }
 
         //Startnode는 StartNodeSetter.cs에서 초기화된다.
